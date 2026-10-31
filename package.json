@@ -1,6 +1,6 @@
 {
   "name": "@kevinweber/pi-copy-prompt",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Copy the full expanded Pi editor draft to the clipboard with super+y",
   "keywords": ["pi-package", "pi", "pi-extension", "pi-coding-agent", "clipboard", "copy-prompt", "editor"],
   "author": "Kevin Weber",
