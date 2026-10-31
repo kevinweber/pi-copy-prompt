@@ -1,51 +1,33 @@
 # @kevinweber/pi-copy-prompt
 
-Copy the full expanded Pi editor draft to the clipboard with **super+y** (⌘Y on macOS). The editor's bottom border shows `⌘Y (copy prompt)` and briefly confirms `prompt copied`. No LLM calls are made.
+Copy your current Pi draft to the clipboard with **⌘Y** on macOS (`super+y`). Collapsed pasted text is copied in full, and the editor briefly shows `prompt copied`.
 
 ## Install
 
-From the repository, once it has been published:
-
-```text
-pi install git:github.com/kevinweber/pi-copy-prompt
-```
-
-Try a local checkout without changing your Pi settings:
-
 ```bash
-pi -e ./src/index.ts
+pi install npm:@kevinweber/pi-copy-prompt@1.0.0
 ```
 
 ## Behavior
 
-- Copies the complete current text draft, including the contents of collapsed paste markers.
-- Does **not** copy system instructions, conversation history, attachments or image bytes.
-- Preserves whitespace in a non-empty draft. An empty or whitespace-only draft shows `Nothing to copy — editor is empty` without writing to the clipboard.
-- Shows confirmation for two seconds after the clipboard helper succeeds, or until the next editor input or programmatic text change.
-- Reports clipboard rejection without success feedback. Pending operations cannot confirm on a replacement editor or session.
-- Does nothing in RPC, JSON or print mode. There is no additional command or configuration.
+- Copies draft text without submitting it, preserving whitespace and expanding collapsed pastes.
+- Does not copy system instructions, conversation history or attachments.
+- Leaves the clipboard unchanged when the draft is empty or whitespace-only.
+- Reports clipboard errors.
 
 ## Compatibility and privacy
 
-Requires Node.js >=22.19.0 and Pi with `CustomEditor` and `getExpandedText()` support. Development checks use Pi 1.4.0. Both Pi host packages are peers, not bundled runtime dependencies.
+Requires Node.js >=22.19.0 and Pi with custom-editor and expanded-paste support.
 
-`super` requires the terminal to report the modifier separately, typically through the Kitty keyboard protocol. The terminal or operating system must also pass the shortcut through rather than intercept it. Terminals without that support may not deliver ⌘Y. The shortcut remains `super+y`; `ctrl+y` retains Pi's yank behavior.
+Your terminal must support the Super/Command modifier, typically through the Kitty keyboard protocol, and pass the shortcut through to Pi. `ctrl+y` keeps its usual yank behavior.
 
-This extension replaces Pi's main editor while inheriting `CustomEditor` controls. Do not combine it with another custom-editor extension: Pi has one editor replacement slot, and load order can leave the hint and shortcut attached to different editors. Disable duplicate workspace copies before installing this package.
+Do not combine this package with another custom-editor extension or a local copy of this extension. Pi supports only one custom editor at a time.
 
-Clipboard delivery uses Pi's platform/native clipboard helper and remote OSC 52 support. OSC 52 emission cannot verify terminal acceptance; `prompt copied` means the helper resolved, not that every terminal accepted the text. Copying expanded pasted content can expose it to clipboard history or synchronization. Only copy content you intend to put there.
+Remote clipboard copying requires terminal support for OSC 52; the confirmation cannot guarantee that the terminal accepted it. Copied text may be saved in clipboard history or synced to other devices.
 
-## Development
+## Contributing
 
-```bash
-npm install
-npm run ci
-npm pack --dry-run
-```
-
-`npm run ci` runs syntax checks, strict typechecks and unit tests. Tests use the real host editor and a mocked clipboard with synthetic drafts; they never write to the system clipboard. These checks do not prove physical key delivery or real terminal/clipboard compatibility. Inspect the package payload before any authorized publication. No publication workflow is included and npm publication is not part of this extraction.
-
-Repository location: <https://github.com/kevinweber/pi-copy-prompt> (planned; not created by this extraction).
+See [CONTRIBUTING.md](https://github.com/kevinweber/pi-copy-prompt/blob/main/CONTRIBUTING.md) for development checks.
 
 ## License
 
